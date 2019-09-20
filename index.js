@@ -18,38 +18,6 @@ handlers.forEach(handler => {
     require(`./Utils/${handler}`)(client);
 });
 
-/*fs.readdir("./Commands/", (err, files) => {
-  if(err) console.log(err);
-
-  if(files.length <= 0){
-    console.log("Couldn't find commands.");
-    return;
-  }
-
-  let folders = files.filter(f => f.split(".")[1] !== "js");
-  let js = files.filter(f => f.split(".")[1] === "js");
-
-  folders.forEach((r, i) => {
-    fs.readdir(`./Commands/${r}`, (err, files) => {
-      const jsFiles = files.filter(f => f.split(".")[1] === "js");
-      jsFiles.forEach((f, i) => {
-        let prop = require(`./Commands/${r}/${f}`);
-        if(!prop) return;
-        client.commands.set(prop.help.name, prop);
-        js = js.filter(q => q !== f);
-        console.log(`Loaded: ${f}`);
-      })
-    })
-  })
-
-  js.forEach((r, i) => {
-    let prop = require(`./Commands/${r}`);
-    if(!prop) return;
-    client.commands.set(prop.help.name, prop);
-    console.log(`Loaded: ${r}`);
-  })
-})*/
-
 client.on("ready", () => {
   console.log(`${client.user.tag} is online`);
 })
