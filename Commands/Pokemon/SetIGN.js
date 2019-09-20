@@ -6,7 +6,7 @@ module.exports = {
   aliases: [],
   category: "Pokemon",
   description: "Sets your ign",
-  usage: "!setign <ign> (ex: !setign Thot Slayer)",
+  usage: "<ign> (ex: !setign Thot Slayer)",
   run: async (client, message, args) => {
     let ign = args.join(" ");
     if(!info[message.author.id]){
