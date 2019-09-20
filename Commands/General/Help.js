@@ -6,7 +6,7 @@ module.exports = {
   aliases: [],
   category: "General",
   description: "Displays help menu",
-  usage: "!help",
+  usage: "",
   run: async (client, message, args) => {
     let categoryNames = [];
     let index = 0;
@@ -81,7 +81,7 @@ function getCategoryEmbed(client, category){
   }else{
     for(let i = 0; i<commands.length; i++){
       let temp = commands[i];
-      embed.addField(temp.name, `Description: ${temp.description}\nUsage: ${temp.usage}`)
+      embed.addField(temp.name, `Description: ${temp.description}\nUsage: ${client.config.prefix}${temp.name} ${temp.usage}`)
     }
   }
   return embed;
