@@ -8,19 +8,13 @@ module.exports = {
   description: "Displays help menu",
   usage: "!help",
   run: async (client, message, args) => {
-    //let categories = new Discord.Collection();
     let categoryNames = [];
     let index = 0;
     client.commands.forEach(function(object, key, map){
       if(!categoryNames.includes(object.category)){
-        //categories.set(object.category, [object]);
         categoryNames.push(object.category);
-      }else{
-        //categories.get(object.category).push(object);
       }
     })
-    //console.log(categories);
-    //console.log(categoryNames);
     message.channel.send(getCategoryEmbed(client, categoryNames[index])).then(msg => {
 
       //Add Reactions to msg
@@ -31,10 +25,12 @@ module.exports = {
         }, i*800)
       })
 
+      //set filter to only let only set reactions and message author to respond
       const filter = (reaction, user) => {
         return reactions.includes(reaction.emoji.name) && user.id === message.author.id;
       }
 
+      //create reactionCollector
       const collector = msg.createReactionCollector(filter, {});
 
       collector.on('collect', (reaction) => {
