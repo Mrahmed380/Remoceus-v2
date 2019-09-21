@@ -7,7 +7,7 @@ module.exports = {
   category: "General",
   description: "Displays information on the current server",
   usage: "",
-  none: "",
+  permissions: [],
   run: async (client, message, args) => {
     if(message.deletable) message.delete();
 

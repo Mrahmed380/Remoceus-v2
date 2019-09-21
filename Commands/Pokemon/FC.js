@@ -7,7 +7,7 @@ module.exports = {
   category: "Pokemon",
   description: "Retrieves friend code info for a user",
   usage: "<none or @user>",
-  permissions: "",
+  permissions: [],
   run: async (client, message, args) => {
     let fcUser = message.mentions.members.first() || message.guild.members.get(message.author.id);
     let embed = new Discord.RichEmbed()

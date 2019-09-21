@@ -7,7 +7,7 @@ module.exports = {
   category: "Pokemon",
   description: "Sets your ign",
   usage: "<ign> (ex: !setign Thot Slayer)",
-  permissions: "",
+  permissions: [],
   run: async (client, message, args) => {
     let ign = args.join(" ");
     if(!info[message.author.id]){

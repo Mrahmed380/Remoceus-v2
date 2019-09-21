@@ -8,7 +8,7 @@ module.exports = {
   category: "General",
   description: "Displays bot information",
   usage: "",
-  permissions: "",
+  permissions: [],
   run: async (client, message, args) => {
     if(message.deletable) message.delete();
     let embed = new RichEmbed()

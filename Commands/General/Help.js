@@ -7,7 +7,7 @@ module.exports = {
   category: "General",
   description: "Displays help menu",
   usage: "",
-  permissions: "",
+  permissions: [],
   run: async (client, message, args) => {
     let categoryNames = [];
     let index = 0;

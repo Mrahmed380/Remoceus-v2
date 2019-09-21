@@ -5,7 +5,7 @@ module.exports = {
   category: "Owner",
   description: "Takes the bot offline (Bot owner only)",
   usage: "",
-  permissions: "",
+  permissions: [],
   run: async (client, message, args) => {
     if(message.deletable) message.delete();
     if(message.author.id !== client.config.botowner) return;
