@@ -8,6 +8,7 @@ module.exports = {
   category: "General",
   description: "Displays all non bot members in the current server",
   usage: "",
+  permissions: "",
   run: async (client, message, args) => {
     if(message.deletable) message.delete();
     let guildMembers = message.guild.members.array().filter(member => !member.user.bot);

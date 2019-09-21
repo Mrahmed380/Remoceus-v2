@@ -7,6 +7,7 @@ module.exports = {
   category: "Moderation",
   description: "Kicks a user",
   usage: "<@user> <reason>",
+  permissions: "Kick Members",
   run: async (client, message, args) => {
     if(message.deletable) message.delete();
 

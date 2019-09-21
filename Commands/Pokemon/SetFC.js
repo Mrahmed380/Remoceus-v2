@@ -8,6 +8,7 @@ module.exports = {
   category: "Pokemon",
   description: "Sets your fc",
   usage: "<fc> (ex: !setfc 3883-7141-8049)",
+  permissions: "",
   run: async (client, message, args) => {
     let fc = args.join(" ");
     if(!info[message.author.id]){

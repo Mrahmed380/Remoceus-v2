@@ -5,6 +5,7 @@ module.exports = {
   category: "Moderation",
   description: "Clears up to 100 messages at a time",
   usage: "<number between 0 and 100>",
+  permissions: "Manage Messages",
   run: async (client, message, args) => {
     if(message.deletable) message.delete();
     if(!message.member.hasPermission("MANAGE_MESSAGES", false, true, true)) return client.errors.noPerms(message,"Manage Messages");
