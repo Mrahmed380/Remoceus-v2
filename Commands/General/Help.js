@@ -9,6 +9,7 @@ module.exports = {
   usage: "",
   permissions: [],
   run: async (client, message, args) => {
+    if(message.deletable) message.delete();
     let categoryNames = [];
     let index = 0;
     client.commands.forEach(function(object, key, map){
@@ -68,7 +69,8 @@ function getCategoryEmbed(client, categoryNames, index){
     let obj = {
       name: object.name,
       description: object.description,
-      usage: object.usage
+      usage: object.usage,
+      permissions: object.permissions.join(", ")
     }
     commands.push(obj);
   })
@@ -82,7 +84,7 @@ function getCategoryEmbed(client, categoryNames, index){
   }else{
     for(let i = 0; i<commands.length; i++){
       let temp = commands[i];
-      embed.addField(titleCase(temp.name), `Description: ${temp.description}\nUsage: ${client.config.prefix}${temp.name} ${temp.usage}`)
+      embed.addField(titleCase(temp.name), `Description: ${temp.description}\nUsage: ${client.config.prefix}${temp.name} ${temp.usage}\n${temp.permissions? `Permissions: ${temp.permissions}`: ``}`)
     }
   }
   return embed;
