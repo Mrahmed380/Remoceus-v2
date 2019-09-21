@@ -15,8 +15,7 @@ module.exports = {
         categoryNames.push(object.category);
       }
     })
-    message.channel.send(getCategoryEmbed(client, categoryNames[index])).then(msg => {
-
+    message.channel.send(getCategoryEmbed(client, categoryNames, index)).then(msg => {
       //Add Reactions to msg
       let reactions = ["⬅", "➡", "⏹"];
       reactions.forEach(function(r, i){
@@ -40,12 +39,12 @@ module.exports = {
         switch(reaction.emoji.name){
           case '⬅':{
             index = (index-1) < 0? categoryNames.length-1 :index-1;
-            msg.edit(getCategoryEmbed(client, categoryNames[index]));
+            msg.edit(getCategoryEmbed(client, categoryNames, index));
             break;
           }
           case '➡':{
             index = (index+1)%categoryNames.length;
-            msg.edit(getCategoryEmbed(client, categoryNames[index]));
+            msg.edit(getCategoryEmbed(client, categoryNames, index));
             break;
           }
           case '⏹':{
@@ -62,9 +61,9 @@ module.exports = {
   }
 }
 
-function getCategoryEmbed(client, category){
+function getCategoryEmbed(client, categoryNames, index){
   let commands = [];
-  client.commands.filter(r => r.category === category).forEach(function(object, key, map){
+  client.commands.filter(r => r.category === categoryNames[index]).forEach(function(object, key, map){
     let obj = {
       name: object.name,
       description: object.description,
@@ -73,9 +72,10 @@ function getCategoryEmbed(client, category){
     commands.push(obj);
   })
   let embed = new Discord.RichEmbed()
-  .setTitle(`${category} Commands`)
+  .setTitle(`${categoryNames[index]} Commands`)
   .setColor(client.config.color)
-  .setThumbnail(client.user.displayAvatarURL);
+  .setThumbnail(client.user.displayAvatarURL)
+  .setFooter(`Page ${index+1} of ${categoryNames.length}`);
   if(commands.length == 0){
     embed.addField("No Commands", "No Commands Listed");
   }else{
