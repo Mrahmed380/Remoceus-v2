@@ -35,7 +35,7 @@ module.exports = {
       collector.on('collect', (reaction) => {
         setTimeout(function(){
           reaction.remove(message.author.id).catch(err => {});
-        }, 500)
+        }, 250)
         switch(reaction.emoji.name){
           case '⬅':{
             index = (index-1) < 0? categoryNames.length-1 :index-1;
@@ -81,8 +81,16 @@ function getCategoryEmbed(client, categoryNames, index){
   }else{
     for(let i = 0; i<commands.length; i++){
       let temp = commands[i];
-      embed.addField(temp.name, `Description: ${temp.description}\nUsage: ${client.config.prefix}${temp.name} ${temp.usage}`)
+      embed.addField(titleCase(temp.name), `Description: ${temp.description}\nUsage: ${client.config.prefix}${temp.name} ${temp.usage}`)
     }
   }
   return embed;
+}
+
+function titleCase(title){
+  let words = title.split(" ");
+  for(let i = 0; i<words.length; i++){
+    words[i] = words[i].substring(0,1).toUpperCase()+words[i].substring(1).toLowerCase();
+  }
+  return words.join(" ");
 }
