@@ -1,5 +1,18 @@
 
 module.exports = (client) => {
+  client.on("ready", () => {
+    console.log(`${client.user.tag} is online`);
+
+    client.user.setPresence({
+      game: {
+        name: "Silver Suffer",
+        type: "Watching"
+      },
+      status: "online",
+      afk: false
+    });
+  })
+
   client.on('message', async message => {
     if(message.channel.type === "dm") return;
     if(message.author.bot) return;
@@ -19,10 +32,6 @@ module.exports = (client) => {
     }catch(e){
       console.log(e);
     }
-  })
-
-  client.on("ready", () => {
-    console.log(`${client.user.tag} is online`);
   })
 
   client.on("error", (err) => console.log(err));
