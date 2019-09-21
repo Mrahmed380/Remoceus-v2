@@ -23,7 +23,7 @@ module.exports = {
     }
 
     if(!message.member.hasPermission("KICK_MEMBERS", false, true, true)){
-      return message.channel.send("Sorry, but you don't have permission to kick members").then(m => m.delete(5000));
+      return client.errors.noPerms(message, "Kick Members");
     }
 
     if(!message.guild.me.hasPermission("KICK_MEMBERS", false, true, true)){
