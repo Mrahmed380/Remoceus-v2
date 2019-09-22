@@ -84,16 +84,8 @@ function getCategoryEmbed(client, categoryNames, index){
   }else{
     for(let i = 0; i<commands.length; i++){
       let temp = commands[i];
-      embed.addField(titleCase(temp.name), `Description: ${temp.description}\nUsage: ${client.config.prefix}${temp.name} ${temp.usage}\n${temp.permissions? `Permissions: ${temp.permissions}`: ``}`)
+      embed.addField(`${client.config.prefix}${temp.name} ${temp.usage}`, `Description: ${temp.description}\n${temp.permissions? `Permissions: ${temp.permissions}`: ``}`)
     }
   }
   return embed;
-}
-
-function titleCase(title){
-  let words = title.split(" ");
-  for(let i = 0; i<words.length; i++){
-    words[i] = words[i].substring(0,1).toUpperCase()+words[i].substring(1).toLowerCase();
-  }
-  return words.join(" ");
 }
