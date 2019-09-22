@@ -18,7 +18,7 @@ module.exports = {
     .addField("Description", pack.description)
     .addField("Bot's Lord and Savior", pack.author)
     .addField("uptime", ms(client.uptime))
-    .setFooter(`${client.user.username} Version: ${pack.version}`)
+    .setFooter(`${client.user.username} Version: ${pack.version}`);
     message.channel.send(embed);
   }
 }
