@@ -17,7 +17,8 @@ module.exports = {
     .setColor(client.config.color)
     .addField("Description", pack.description)
     .addField("Bot's Lord and Savior", pack.author)
-    .addField("uptime", ms(client.uptime))
+    .addField("Uptime", ms(client.uptime))
+    .addField("Recent Changes", `-${client.changeLogs[pack.version].join(",\n-")}`)
     .setFooter(`${client.user.username} Version: ${pack.version}`);
     message.channel.send(embed);
   }

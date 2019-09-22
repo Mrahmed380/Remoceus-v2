@@ -1,7 +1,5 @@
 const { RichEmbed } = require("discord.js");
 const { PokemonInfo, TypeColors } = require("../../Utils/Pokemon.js");
-const { Image } = require("canvas")
-
 
 module.exports = {
   name: "pokemon",
@@ -25,13 +23,13 @@ module.exports = {
 
 async function getPokeEmbed(obj, client, page = "stats"){
   let url = `https://www.serebii.net/pokemon/art/${getNum(obj.num)}${getforme(obj)}.png`;
-  let image = await testImage(url)
-    .then(r => {
-      return url;
-    })
-    .catch(err => {
-      return 'https://www.serebii.net/pokearth/sprites/rb/000.png'
-    })
+  let image = await client.errors.checkURL(url)
+  .then(r => {
+    return url;
+  })
+  .catch(err => {
+    return 'https://www.serebii.net/pokearth/sprites/rb/000.png';
+  })
   let numOfPokemon = getMaxDex();
   let embed = new RichEmbed()
   .setTitle(`${(obj.forme?`${obj.baseSpecies}-${obj.forme}`:obj.species)}`)
@@ -116,26 +114,4 @@ function getNum(number){
   }else{
     return number;
   }
-}
-
-function testImage(url, timeoutT) {
-    return new Promise(function (resolve, reject) {
-        var timeout = timeoutT || 5000;
-        var timer, img = new Image();
-        img.onerror = img.onabort = function () {
-            clearTimeout(timer);
-            reject("error");
-        };
-        img.onload = function () {
-            clearTimeout(timer);
-            resolve("success");
-        };
-        timer = setTimeout(function(){
-            // reset .src to invalid URL so it stops previous
-            // loading, but doesn't trigger new load
-            img.src = "//!!!!/test.jpg";
-            reject("timeout");
-        }, timeout);
-        img.src = url;
-    });
 }
