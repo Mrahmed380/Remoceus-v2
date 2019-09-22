@@ -1,7 +1,6 @@
 const Pokemon = require("../../Utils/Pokemon.js");
 const { RichEmbed } = require("discord.js");
 const movesPerPage = 3;
-const { Image } = require("canvas");
 
 module.exports = {
   name: "learnset",
@@ -67,7 +66,7 @@ module.exports = {
 
 async function getMoveSetEmbed(client, poke, learnset, index){
   let url = `https://www.serebii.net/pokemon/art/${getNum(poke.num)}${getforme(poke)}.png`;
-  let image = await testImage(url)
+  let image = await client.errors.checkURL(url)
   .then(r => {
     return url;
   })
@@ -84,7 +83,7 @@ async function getMoveSetEmbed(client, poke, learnset, index){
   .setFooter(`Page ${index+1} of ${maxPages}`);
 
   let moves = Object.keys(learnset);
-  
+
   for(let i = index*movesPerPage; i<(index+1)*movesPerPage && i<moves.length; i++){
     let move = Pokemon.MoveInfo[moves[i]];
     embed.addField(`${move.name}`, `Type: ${move.type}\nPP: ${move.pp >= 5?`${move.pp} to ${move.pp+(move.pp/5)*3}`:move.pp}\n${move.basePower?`Power: ${move.basePower} `:''}${move.accuracy?`Accuracy: ${move.accuracy.toString() == "true"?'--':`${move.accuracy}%`}`:''}\nCategory: ${move.category}\n${move.zMovePower?`Z-Move Power: ${move.zMovePower}\n`:``}`)
@@ -109,26 +108,4 @@ function getNum(number){
   }else{
     return number;
   }
-}
-
-function testImage(url, timeoutT) {
-    return new Promise(function (resolve, reject) {
-        var timeout = timeoutT || 5000;
-        var timer, img = new Image();
-        img.onerror = img.onabort = function () {
-            clearTimeout(timer);
-            reject("error");
-        };
-        img.onload = function () {
-            clearTimeout(timer);
-            resolve("success");
-        };
-        timer = setTimeout(function(){
-            // reset .src to invalid URL so it stops previous
-            // loading, but doesn't trigger new load
-            img.src = "//!!!!/test.jpg";
-            reject("timeout");
-        }, timeout);
-        img.src = url;
-    });
 }
