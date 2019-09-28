@@ -38,5 +38,8 @@ module.exports = {
     "Added !remoceus command",
     "Added !mute, !tempmute, and !unmute commands",
     "Added !flip, !politoed, !roll, and !someone commands"
+  ],
+  "1.5.1": [
+    "Bug Fixes"
   ]
 }
