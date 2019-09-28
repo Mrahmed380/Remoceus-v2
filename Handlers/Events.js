@@ -28,11 +28,27 @@ module.exports = (client) => {
       return;
     }
     try{
+      if((command === "!politoed" && client.cooldown.has(message.author.id)) || !client.politoed){
+        message.delete();
+        message.channel.send("!politoed is on cooldown").then(m => m.delete(5000));
+        return;
+      }
       command.run(client, message, args);
+      if(command === "!politoed"){
+        addCooldown(message);
+      }
     }catch(e){
       console.log(e);
     }
   })
+
+  function addCooldown(message){
+    client.cooldown.set(message.author.id, message.guild.id);
+    setTimeout(function(){
+      client.cooldown.delete(message.author.id);
+      message.author.send("You can now use the !politoed command");
+    }, 300000)
+  }
 
   client.on("error", (err) => console.log(err));
   client.on("warn", (info) => console.warn(info));

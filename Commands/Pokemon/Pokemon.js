@@ -14,36 +14,27 @@ module.exports = {
     if(!pokemon) return message.channel.send("No name given").then(m => m.delete(5000));
     let PokeObject = PokemonInfo[pokemon];
     if(!PokeObject) return message.channel.send("Could not find pokemon").then(m => m.delete(5000));
-    message.channel.send(await getPokeEmbed(PokeObject, client))
-      .then(msg => {
-        let reactions = [{emoji: "", page: "Stats"}]
-      });
+    message.channel.send(getPokeEmbed(PokeObject, client))
   }
 }
 
-async function getPokeEmbed(obj, client, page = "stats"){
+function getPokeEmbed(obj, client, page = "stats"){
   let url = `https://www.serebii.net/pokemon/art/${getNum(obj.num)}${getforme(obj)}.png`;
-  let image = await client.errors.checkURL(url)
-  .then(r => {
-    return url;
-  })
-  .catch(err => {
-    return 'https://www.serebii.net/pokearth/sprites/rb/000.png';
-  })
   let numOfPokemon = getMaxDex();
+  const { forme, baseSpecies, species, types, num, heightm, weightkg, baseStats, abilities, eggGroups, color, evos, prevo } = obj;
   let embed = new RichEmbed()
-  .setTitle(`${(obj.forme?`${obj.baseSpecies}-${obj.forme}`:obj.species)}`)
-  .setThumbnail(image)
-  .setColor(TypeColors[obj.types[0]])
-  .setFooter(`Pokemon #${obj.num < 10?`00${obj.num}`: (obj.num < 100? `0${obj.num}`: obj.num)} of ${getMaxDex()}`)
-  .addField("Typing", obj.types.join("/\n"), true)
-  .addField("Height/ Weight", `Height: ${obj.heightm} m\nWeight: ${obj.weightkg} kg`, true)
-  .addField("Base Stats",`HP: ${obj.baseStats.hp}\nAttack: ${obj.baseStats.atk}\nDefense: ${obj.baseStats.def}\nSp. Attack: ${obj.baseStats.spa}\nSp. Defense: ${obj.baseStats.spd}\nSpeed: ${obj.baseStats.spe}`, true)
-  .addField("Abilities", getAbilities(obj.abilities), true)
-  .addField("Egg Groups", obj.eggGroups, true)
-  .addField("Color", obj.color, true)
-  if(obj.prevo || obj.evos){
-    embed.addField("Evolutions", `${obj.prevo? `Evolves from: ${PokemonInfo[obj.prevo].species} (${getEvoType(obj)})\n`: ``}${obj.evos?`Evolves into: ${getEvos(obj.evos).join(" or ")}`: ''}`);
+  .setTitle(`${(forme?`${baseSpecies}-${forme}`:species)}`)
+  .setThumbnail(url)
+  .setColor(TypeColors[types[0]])
+  .setFooter(`Pokemon #${num < 10?`00${num}`: (num < 100? `0${num}`: num)} of ${getMaxDex()}`)
+  .addField("Typing", types.join("/\n"), true)
+  .addField("Height/ Weight", `Height: ${heightm} m\nWeight: ${weightkg} kg`, true)
+  .addField("Base Stats",`HP: ${baseStats.hp}\nAttack: ${baseStats.atk}\nDefense: ${baseStats.def}\nSp. Attack: ${baseStats.spa}\nSp. Defense: ${baseStats.spd}\nSpeed: ${baseStats.spe}`, true)
+  .addField("Abilities", getAbilities(abilities), true)
+  .addField("Egg Groups", eggGroups, true)
+  .addField("Color", color, true)
+  if(prevo || evos){
+    embed.addField("Evolutions", `${prevo? `Evolves from: ${PokemonInfo[prevo].species} (${getEvoType(obj)})\n`: ``}${evos?`Evolves into: ${getEvos(evos).join(" or ")}`: ''}`);
   }
   return embed;
 }
