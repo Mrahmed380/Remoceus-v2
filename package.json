@@ -1,6 +1,6 @@
 {
   "name": "remoceus-patreon-version-2",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "A bot created for the Silver League Patreon Server",
   "main": "index.js",
   "scripts": {
