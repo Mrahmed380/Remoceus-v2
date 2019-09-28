@@ -31,5 +31,12 @@ module.exports = {
     "Added Changes Logs",
     "!botinfo now displays the most recent changes",
     "Added ChangeLogs Command"
+  ],
+  "1.5.0": [
+    "Added !iam and !iamnot commands",
+    "Modified the !learnsets, !move, and !pokemon commands",
+    "Added !remoceus command",
+    "Added !mute, !tempmute, and !unmute commands",
+    "Added !flip, !politoed, !roll, and !someone commands"
   ]
 }

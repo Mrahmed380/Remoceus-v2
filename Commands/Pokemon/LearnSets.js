@@ -66,19 +66,12 @@ module.exports = {
 
 async function getMoveSetEmbed(client, poke, learnset, index){
   let url = `https://www.serebii.net/pokemon/art/${getNum(poke.num)}${getforme(poke)}.png`;
-  let image = await client.errors.checkURL(url)
-  .then(r => {
-    return url;
-  })
-  .catch(err => {
-    return 'https://www.serebii.net/pokearth/sprites/rb/000.png';
-  })
 
   let maxPages = Math.ceil(Object.keys(learnset).length/movesPerPage);
 
   const embed = new RichEmbed()
   .setTitle(poke.species)
-  .setThumbnail(image)
+  .setThumbnail(url)
   .setColor(Pokemon.TypeColors[poke.types[0]])
   .setFooter(`Page ${index+1} of ${maxPages}`);
 

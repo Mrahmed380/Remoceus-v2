@@ -16,17 +16,10 @@ module.exports = {
     let MoveInfo = Pokemon.MoveInfo[move];
     if(!MoveInfo) return message.channel.send(`Could not find ${args.join(" ")}.`).then(m => m.delete(5000));
     let url = `https://www.serebii.net/pokedex-bw/type/${MoveInfo.type.toLowerCase()}.gif`;
-    let image = await client.errors.checkURL(url)
-    .then(r => {
-      return url;
-    })
-    .catch(err => {
-      return 'https://www.serebii.net/pokearth/sprites/rb/000.png';
-    })
 
     let embed = new RichEmbed()
     .setTitle(`${MoveInfo.name} Info`)
-    .setThumbnail(image)
+    .setThumbnail(url)
     .setColor(Pokemon.TypeColors[MoveInfo.type])
     .setDescription(MoveInfo.shortDesc? MoveInfo.shortDesc: (MoveInfo.desc? MoveInfo.desc: "No Description Given"));
     let items = await getBasicInfo(MoveInfo);

@@ -11,6 +11,9 @@ client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 client.errors = errors;
 client.changeLogs = changeLogs;
+client.politoed = true;
+client.cooldown = new Discord.Collection();
+
 
 config({
   path: __dirname + "/.env"

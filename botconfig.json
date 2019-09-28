@@ -1,5 +1,7 @@
 {
     "color": "#BEEEEF",
     "prefix": "!",
-    "botowner": "130821192905916416"
+    "botowner": "130821192905916416",
+    "modChannel": "moderation",
+    "muteRole": "Timeout"
 }
