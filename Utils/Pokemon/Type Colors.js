@@ -17,5 +17,5 @@ module.exports = {
   Psychic: "#F95587",
   Rock: "#B6A136",
   Steel: "#B7B7CE",
-  Water: "#6390F0"
+  Water: "#6390F0",
 }
