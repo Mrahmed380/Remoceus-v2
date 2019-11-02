@@ -41,5 +41,9 @@ module.exports = {
   ],
   "1.5.1": [
     "Bug Fixes"
+  ],
+  "1.6.0": [
+    "Added MongoDB Support",
+    "Updated FC command to use MongoDB (If you had already registered your FC, don't worry, it was carried over)"
   ]
 }
