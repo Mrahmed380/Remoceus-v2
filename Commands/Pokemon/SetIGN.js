@@ -1,26 +1,31 @@
-const info = require("../../League Files/Info.json");
-const fs = require("fs");
+const FC = require("../../Models/FC.js");
 
 module.exports = {
-  name: "setign",
-  aliases: [],
-  category: "Pokemon",
-  description: "Sets your ign",
-  usage: "<ign> (ex: !setign Thot Slayer)",
-  permissions: [],
-  run: async (client, message, args) => {
-    let ign = args.join(" ");
-    if(!info[message.author.id]){
-      info[message.author.id] = {
-        fc: "Not set, use !setfc <fc> to set your FC",
-        ign: ign
-      };
-    }else{
-      info[message.author.id].ign = ign;
-    }
-    fs.writeFile('./League Files/Info.json', JSON.stringify(info), (err) => {
-      if(err) console.log(err);
-    })
-    message.channel.send(`Set ${message.author.username}'s ign to ${ign}`);
-  }
+	name: "setign",
+	aliases: [],
+	category: "Pokemon",
+	description: "Sets your In Game Name for !fc command",
+	usage: "<ign>",
+	permissions: [],
+	run: async (client, message, args) => {
+		if(message.deletable) message.delete();
+		let myNewIGN = args.length > 0 ? args.join(" "): "No IGN set, use !setign <ign> to set your ign (ex. !setign Thot Slayer)";
+		FC.findOne({
+			userID: message.author.id,
+		}, (err, fc) => {
+			if(err) console.log(err);
+			if(!fc){
+				const newFC = new FC({
+					userID: message.author.id,
+					fc: "No FC set, use !setfc <fc> to set your fc (ex. !setfc 3883-7141-8049)",
+					ign: myNewIGN
+				});
+				newFC.save().catch(err => console.log(err));
+			}else{
+				fc.ign = myNewIGN;
+				fc.save().catch(err => console.log(err));
+			}
+			message.channel.send(`Set IGN to: ${myNewIGN}`);
+		})
+	}
 }

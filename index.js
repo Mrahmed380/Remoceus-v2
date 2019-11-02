@@ -5,6 +5,13 @@ const botconfig = require("./botconfig.json");
 const errors = require("./Utils/Errors.js");
 const { config } = require("dotenv");
 const changeLogs = require("./Utils/ChangeLogs.js");
+const mongoose = require("mongoose");
+const db = require("./mongoose.js");
+
+mongoose.connect(
+	db,
+	{useNewUrlParser: true, useUnifiedTopology: true}
+);
 
 client.config = botconfig;
 client.commands = new Discord.Collection();
