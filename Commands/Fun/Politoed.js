@@ -1,7 +1,7 @@
 
 module.exports = {
-  name: "Politoed",
-  aliases: [],
+  name: "politoed",
+  aliases: ["rant"],
   category: "Fun",
   description: "Sends the infamous politoed rant",
   usage: "",
