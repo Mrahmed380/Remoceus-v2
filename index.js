@@ -3,6 +3,7 @@ const client = new Discord.Client();
 const fs = require("fs");
 const botconfig = require("./botconfig.json");
 const errors = require("./Utils/Errors.js");
+const helpers = require("./Utils/Helper.js");
 const { config } = require("dotenv");
 const changeLogs = require("./Utils/ChangeLogs.js");
 const mongoose = require("mongoose");
@@ -17,6 +18,7 @@ client.config = botconfig;
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 client.errors = errors;
+client.helpers = helpers;
 client.changeLogs = changeLogs;
 
 
