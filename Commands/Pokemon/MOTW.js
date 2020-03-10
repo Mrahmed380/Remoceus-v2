@@ -78,6 +78,9 @@ const createMOTWEmbed = (client, message, motws) => {
 				 .addField("EVs", `${formatEVSpread(currentSet)}`)
 				 .addField("Moveset", `${currentSet.move1}\n${currentSet.move2}\n${currentSet.move3}\n${currentSet.move4}`)
 				 .setFooter(`Set #${index+1} of ${motws.length}`);
+         if(currentSet.ytLink){
+           currentSet.setURL(currentSet.ytLink);
+         }
 	}
 	return embed;
 }
