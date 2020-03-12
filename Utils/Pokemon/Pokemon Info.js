@@ -1,6 +1,4 @@
-'use strict';
 
-/**@type {{[k: string]: TemplateData}} */
 module.exports = {
 	bulbasaur: {
 		num: 1,
