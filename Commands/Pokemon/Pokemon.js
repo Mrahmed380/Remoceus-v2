@@ -19,7 +19,7 @@ module.exports = {
 }
 
 function getPokeEmbed(obj, client, page = "stats"){
-  let url = `https://www.serebii.net/pokemon/art/${getNum(obj.num)}${getforme(obj)}.png`;
+  let url = `https://www.serebii.net/pokemon/art/${getNum(obj.num)}.png`;
   let numOfPokemon = getMaxDex();
   const { forme, baseSpecies, species, types, num, heightm, weightkg, baseStats, abilities, eggGroups, color, evos, prevo } = obj;
   let embed = new RichEmbed()
@@ -89,13 +89,13 @@ function getAbilities(abilities){
   }
 }
 
-function getforme(obj){
+/*function getforme(obj){
   if(obj.formeLetter){
     return `-${obj.formeLetter.toLowerCase()}`;
   }else{
     return '';
   }
-}
+}*/
 
 function getNum(number){
   if(number < 10){
