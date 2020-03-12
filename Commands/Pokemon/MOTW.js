@@ -1,6 +1,7 @@
 const { RichEmbed } = require("discord.js");
 const MOTW = require("../../Models/MOTW.js");
 let index = 0;
+const { PokemonInfo } = require("../../Utils/Pokemon.js");
 
 module.exports = {
 	name: "motw",
@@ -11,7 +12,8 @@ module.exports = {
 	permissions: [],
 	run: async (client, message, args) => {
 		if(message.deletable) message.delete();
-		let motws = args[0] ? getMOTWWithSpecies(args[0]) : await getMOTW();
+		index = 0;
+		let motws = args[0] ? await getMOTWWithSpecies(args[0]) : await getMOTW();
 		if(motws && motws.length > 1){
 			motws = motws.reverse();
 		}
@@ -65,13 +67,14 @@ module.exports = {
 
 const createMOTWEmbed = (client, message, motws) => {
 	let embed = new RichEmbed()
-	.setThumbnail(message.guild.iconURL)
 	.setColor(client.config.color);
 	if(!motws || motws.length === 0 || !motws[index]){
-		embed.addField("No MOTWs", "Come back later!");
+		embed.addField("No MOTWs", "Come back later!")
+		.setThumbnail(message.guild.iconURL);
 	}else{
 		let currentSet = motws[index];
 		embed.setTitle(currentSet.setName)
+				 .setThumbnail(getThumbnail(message, currentSet.pokemon))
 				 .addField("Pokemon", client.helpers.getTitleCase(currentSet.pokemon))
 				 .addField("Ability(s)", currentSet.ability)
 				 .addField("Item(s)", currentSet.item)
@@ -79,8 +82,9 @@ const createMOTWEmbed = (client, message, motws) => {
 				 .addField("Moveset", `${currentSet.move1}\n${currentSet.move2}\n${currentSet.move3}\n${currentSet.move4}`)
 				 .setFooter(`Set #${index+1} of ${motws.length}`);
          if(currentSet.ytLink){
-           currentSet.setURL(currentSet.ytLink);
+           embed.setURL(currentSet.ytLink);
          }
+				 //https://www.serebii.net/pokemon/art/002.png
 	}
 	return embed;
 }
@@ -109,8 +113,9 @@ const getMOTW = async () => {
 
 const getMOTWWithSpecies = async (species) => {
 	let motws = await new Promise(function(resolve, reject) {
+    let pokemon = species.toLowerCase().trim();
 		MOTW.find({
-			pokemon: species.toLowerCase()
+			pokemon: pokemon
 		}).exec((err, res) => {
 			if(err) console.log(err);
 			if(!res) resolve([]);
@@ -118,4 +123,27 @@ const getMOTWWithSpecies = async (species) => {
 		})
 	});
 	return motws;
+}
+
+const getThumbnail = (message, species) => {
+	let poke = PokemonInfo[species.toLowerCase()];
+	if(!species){
+		return message.guild.iconURL;
+	}
+	if(!poke){
+		return message.guild.iconURL;
+	}
+	let dexNum = `${poke.num}`;
+	switch(dexNum.length){
+		case 1: {
+			dexNum = `00${dexNum}`;
+			break;
+		}
+		case 2: {
+			dexNum = `0${dexNum}`;
+			break;
+		}
+		default: break;
+	}
+	return `https://www.serebii.net/pokemon/art/${dexNum}.png`;
 }

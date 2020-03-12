@@ -75,6 +75,12 @@ async function getBasicInfo(moveinfo){
       func: (power) => {
         return ["Z-Move Power",power];
       }
+    },
+    {
+      item: "gmaxPower",
+      func: (power) => {
+        return ["Max Move Power", power]
+      }
     }
   ]
   for(let i = 0; i<checks.length; i++){
