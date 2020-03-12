@@ -45,5 +45,9 @@ module.exports = {
   "1.6.0": [
     "Added MongoDB Support",
     "Updated FC command to use MongoDB (If you had already registered your FC, don't worry, it was carried over)"
+  ],
+  "1.7.0": [
+    "Added MOTW command",
+    "Updated info for generation 8"
   ]
 }
