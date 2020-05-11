@@ -1,5 +1,5 @@
 
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = {
   name: "kick",
@@ -12,7 +12,7 @@ module.exports = {
     if(message.deletable) message.delete();
 
     if(!args[0]){
-      return message.channel.send("You need to mention another user").then(m => m.delete(5000));
+      return message.channel.send("You need to mention another user").then(m => m.delete({timeout: 5000}));
     }
 
     let reason = args.slice(1).join(" ") || "No Reason Given";
@@ -20,7 +20,7 @@ module.exports = {
     let toKick = message.mentions.members.first();
 
     if(!toKick){
-      return message.channel.send("Could not find user").then(m => m.delete(5000));
+      return message.channel.send("Could not find user").then(m => m.delete({timeout: 5000}));
     }
 
     if(!message.member.hasPermission("KICK_MEMBERS", false, true, true)){
@@ -28,11 +28,11 @@ module.exports = {
     }
 
     if(!message.guild.me.hasPermission("KICK_MEMBERS", false, true, true)){
-      return message.channel.send("Sorry, but I don't have permission to kick members").then(m => m.delete(5000));
+      return message.channel.send("Sorry, but I don't have permission to kick members").then(m => m.delete({timeout: 5000}));
     }
 
     if(toKick.id === message.author.id){
-      return message.channle.send("You cannot kick yourself").then(m => m.delete(5000));
+      return message.channle.send("You cannot kick yourself").then(m => m.delete({timeout: 5000}));
     }
 
     if(toKick.id === client.user.id){
@@ -45,9 +45,9 @@ module.exports = {
 
     let kickChannel = message.guild.channels.find(channel => channel.name === "logs") || message.channel;
 
-    const kickEmbed = new RichEmbed()
+    const kickEmbed = new MessageEmbed()
     .setTitle("Kick Embed")
-    .setThumbnail(toKick.user.displayAvatarURL)
+    .setThumbnail(toKick.user.displayAvatarURL())
     .setColor(client.config.color)
     .addField("Kicked User", `${toKick.user.tag} (${toKick.id})`)
     .addField("Kicked By", `${message.author.tag} (${message.author.id})`);

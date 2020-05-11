@@ -1,5 +1,5 @@
 const ms = require("ms");
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = {
   name: "tempmute",
@@ -14,18 +14,18 @@ module.exports = {
     let tomute = message.guild.member(message.mentions.users.first());
     if(!tomute) return client.errors.noUser(message);
     if(!message.member.hasPermission("MANAGE_ROLES")) return client.errors.noPerms(message, "Manage Roles");
-    if(message.member.highestRole.comparePositionTo(tomute.highestRole)<=0) return message.reply("Cannot mute member.").then(r => r.delete(5000));
-    let muterole = message.guild.roles.find(role => role.name === client.config.muteRole);
-    if(!muterole) return message.channel.send("No \"Muted\" role").then(m => m.delete(5000));
+    if(message.member.highestRole.comparePositionTo(tomute.highestRole)<=0) return message.reply("Cannot mute member.").then(r => r.delete({timeout: 5000}));
+    let muterole = message.guild.roles.cache.find(role => role.name === client.config.muteRole);
+    if(!muterole) return message.channel.send("No \"Muted\" role").then(m => m.delete({timeout: 5000}));
 
     let mutetime = args[1];
-    if(!mutetime) return message.reply("You didn't specify a time!").then(r => r.delete(5000));
+    if(!mutetime) return message.reply("You didn't specify a time!").then(r => r.delete({timeout: 5000}));
 
-    tomute.addRole(muterole.id)
+    tomute.roles.add(muterole)
     .then(() => {
-      message.channel.send(`${tomute.user.tag} has been muted for ${ms(ms(mutetime))}`).then(m => m.delete(5000));
+      message.channel.send(`${tomute.user.tag} has been muted for ${ms(ms(mutetime))}`).then(m => m.delete({timeout: 5000}));
 
-      let muteEmbed = new RichEmbed()
+      let muteEmbed = new MessageEmbed()
       .setDescription("Temp Mute")
       .setColor(client.config.color)
       .addField("Muted User", `${tomute.user.tag} with ID: ${tomute.id}`)
@@ -37,11 +37,11 @@ module.exports = {
 
       mutechannel.send(muteEmbed).then(m => {
         setTimeout(function(){
-          tomute.removeRole(muterole.id)
+          tomute.roles.remove(muterole)
           .then(() => {
-            message.channel.send(`${tomute.user.tag} has been unmuted!`).then(m => m.delete(5000).catch(err => {}));
+            message.channel.send(`${tomute.user.tag} has been unmuted!`).then(m => m.delete({timeout: 5000}).catch(err => {}));
           })
-          .catch(err => message.channel.send("I couldn't unmute them").then(m => m.delete(5000).catch(err => {})))
+          .catch(err => message.channel.send("I couldn't unmute them").then(m => m.delete({timeout: 5000}).catch(err => {})))
         }, ms(mutetime));
       })
       .catch(err => {});

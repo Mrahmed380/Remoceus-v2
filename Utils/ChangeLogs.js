@@ -49,5 +49,10 @@ module.exports = {
   "1.7.0": [
     "Added MOTW command",
     "Updated info for generation 8"
+  ],
+  "1.7.1": [
+    "Updated Discord.js to version 12",
+    "Bug Fixes",
+    "Removed !politoed"
   ]
 }

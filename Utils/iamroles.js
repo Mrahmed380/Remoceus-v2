@@ -1,7 +1,7 @@
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = (client) => {
-  let help = new RichEmbed()
+  let help = new MessageEmbed()
   .setTitle("Assignable Roles")
   .setThumbnail(client.user.displayAvatarURL)
   .setColor(client.config.color)

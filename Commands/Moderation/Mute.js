@@ -1,4 +1,4 @@
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = {
   name: "mute",
@@ -12,19 +12,19 @@ module.exports = {
     let tomute = message.guild.member(message.mentions.users.first());
     if(!tomute) return client.errors.noUser(message);
     if(!message.member.hasPermission("MANAGE_ROLES")) return client.errors.noPerms(message, "Manage Roles");
-    if(message.member.highestRole.comparePositionTo(tomute.highestRole)<=0) return message.reply("Cannot mute member.").then(r => r.delete(5000));
-    let muterole = message.guild.roles.find(role => role.name === client.config.muteRole);
+    if(message.member.highestRole.comparePositionTo(tomute.highestRole)<=0) return message.reply("Cannot mute member.").then(r => r.delete({timeout: 5000}));
+    let muterole = message.guild.roles.cache.find(role => role.name === client.config.muteRole);
 
-    if(!muterole) return message.channel.send("No \"Muted\" role").then(m => m.delete(5000));
+    if(!muterole) return message.channel.send("No \"Muted\" role").then(m => m.delete({timeout: 5000}));
 
-    let mutechannel = message.guild.channels.find(channel => channel.name === client.config.modChannel) || message.channel;
+    let mutechannel = message.guild.channels.cache.find(channel => channel.name === client.config.modChannel) || message.channel;
     if(!mutechannel) return message.channel.send("Couldn't find mute channel");
 
-    tomute.addRole(muterole.id)
+    tomute.roles.add(muterole)
     .then(() => {
-      message.channel.send(`${tomute.user.tag} has been muted`).then(m => m.delete(5000));
+      message.channel.send(`${tomute.user.tag} has been muted`).then(m => m.delete({timeout: 5000}));
 
-      let muteEmbed = new RichEmbed()
+      let muteEmbed = new MessageEmbed()
       .setDescription("Temp Mute")
       .setColor(client.config.color)
       .addField("Muted User", `${tomute} with ID: ${tomute.id}`)
@@ -32,6 +32,6 @@ module.exports = {
 
       mutechannel.send(muteEmbed);
     })
-    .catch(err => message.channel.send("I'm sorry, but I was unable to mute this user.").then(m => m.delete(5000).catch(err => {})));
+    .catch(err => message.channel.send("I'm sorry, but I was unable to mute this user.").then(m => m.delete({timeout: 5000}).catch(err => {})));
   }
 }

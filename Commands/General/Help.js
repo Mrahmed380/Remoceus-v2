@@ -74,10 +74,10 @@ function getCategoryEmbed(client, categoryNames, index){
     }
     commands.push(obj);
   })
-  let embed = new Discord.RichEmbed()
+  let embed = new Discord.MessageEmbed()
   .setTitle(`${categoryNames[index]} Commands`)
   .setColor(client.config.color)
-  .setThumbnail(client.user.displayAvatarURL)
+  .setThumbnail(client.user.displayAvatarURL())
   .setFooter(`Page ${index+1} of ${categoryNames.length}`);
   if(commands.length == 0){
     embed.addField("No Commands", "No Commands Listed");

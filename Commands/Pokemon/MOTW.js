@@ -1,4 +1,4 @@
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const MOTW = require("../../Models/MOTW.js");
 let index = 0;
 const { PokemonInfo } = require("../../Utils/Pokemon.js");
@@ -35,9 +35,9 @@ module.exports = {
 			const collector = msg.createReactionCollector(filter, {});
 
 			collector.on('collect', (reaction) => {
-				setTimeout(function(){
+				/*setTimeout(function(){
 					reaction.remove(message.author.id).catch(err => {});
-				}, 250)
+				}, 250)*/
 				switch(reaction.emoji.name){
 					case '⬅':{
 						index = (index - 1) < 0 ? motws.length - 1 : index - 1;
@@ -66,7 +66,7 @@ module.exports = {
 }
 
 const createMOTWEmbed = (client, message, motws) => {
-	let embed = new RichEmbed()
+	let embed = new MessageEmbed()
 	.setColor(client.config.color);
 	if(!motws || motws.length === 0 || !motws[index]){
 		embed.addField("No MOTWs", "Come back later!")
@@ -84,7 +84,6 @@ const createMOTWEmbed = (client, message, motws) => {
          if(currentSet.ytLink){
            embed.setURL(currentSet.ytLink);
          }
-				 //https://www.serebii.net/pokemon/art/002.png
 	}
 	return embed;
 }

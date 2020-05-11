@@ -1,4 +1,4 @@
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = {
   name: "iam",
@@ -16,11 +16,11 @@ module.exports = {
     }
     switch(rolename.toLowerCase()){
       case 'spoilers': {
-        let role = message.guild.roles.find(r => r.name === "Spoilers");
-        if(!role) return message.channel.send("Could not find spoilers role").then(m => m.delete(5000).catch(err => {}));
-        message.member.addRole(role.id)
-          .then(r => message.channel.send(`Added Spoilers role to ${message.author.tag}`).then(m => m.delete(5000).catch(err => {})))
-          .catch(err => message.channel.send(`Failed to add Spoilers role to ${message.author.tag}`).then(m => m.delete(5000).catch(err => {})));
+        let role = message.guild.roles.cache.find(r => r.name === "Spoilers");
+        if(!role) return message.channel.send("Could not find spoilers role").then(m => m.delete({timeout: 5000}).catch(err => {}));
+        message.member.roles.add(role)
+          .then(r => message.channel.send(`Added Spoilers role to ${message.author.tag}`).then(m => m.delete({timeout: 5000}).catch(err => {})))
+          .catch(err => message.channel.send(`Failed to add Spoilers role to ${message.author.tag}`).then(m => m.delete({timeout: 5000}).catch(err => {})));
         break;
       }
 

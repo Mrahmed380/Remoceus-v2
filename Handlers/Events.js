@@ -1,9 +1,6 @@
 const Discord = require("discord.js");
 
 module.exports = (client) => {
-	client.politoed = true;
-	client.cooldown = new Discord.Collection();
-	
   client.on("ready", () => {
     console.log(`${client.user.tag} is online`);
 
@@ -16,6 +13,15 @@ module.exports = (client) => {
       afk: false
     });
   })
+
+	client.on('guildMemberAdd', async member => {
+		let guild = client.guild.get("618834177340604426");
+		if(!guild) return;
+		let channel = guild.channels.get("618834177340604434");
+		if(!channel) return;
+		channel.send(`Welcome to ${guild.name}, ${member.user.name}.\nType !setfc <fc> and !setign <ign> to set your friend code and in-game name.`)
+			.catch(err => console.log(err));
+	})
 
   client.on('message', async message => {
     if(message.channel.type === "dm") return;
@@ -32,19 +38,7 @@ module.exports = (client) => {
       return;
     }
     try{
-      if(cmd === "!politoed" && (client.cooldown.has(message.author.id) || !client.politoed)){
-        message.delete();
-        message.channel.send("!politoed is on cooldown").then(m => m.delete(5000));
-        return;
-      }
       command.run(client, message, args);
-      if(cmd === "!politoed"){
-		client.cooldown.set(message.author.id, message.guild.id);
-		setTimeout(function(){
-			client.cooldown.delete(message.author.id);
-			message.author.send("You can now use the !politoed command");
-		}, 300000)
-      }
     }catch(e){
       console.log(e);
     }
