@@ -1,5 +1,3 @@
-const { Attachment } = require("discord.js");
-
 module.exports = {
   name: "flip",
   aliases: [],
@@ -8,18 +6,13 @@ module.exports = {
   usage: "",
   permissions: [],
   run: async (client, message, args) => {
-    var promise = new Promise(function(resolve, reject) {
-      let flip = Math.round(Math.random());
-      if(flip === 0){
-        resolve(new Attachment('./Images/Heads.png'));
-      }else{
-        reject(new Attachment('./Images/Tails.png'));
-      }
-    });
-    promise.then((attachment) => {
-      message.channel.send("The coin landed on heads!", attachment);
-    }).catch((attachment) => {
-      message.channel.send("The coin landed on tails!", attachment);
+    let flip = Math.round(Math.random()) == 0 ? "Heads" : "Tails";
+
+    message.channel.send(`The coin landed on ${flip.toLowerCase()}.`, {
+      files: [{
+        attachment: `./Images/${flip}.png`,
+        name: `${flip}.png`
+      }]
     })
   }
 }
