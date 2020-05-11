@@ -1,4 +1,4 @@
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = {
   name: "getpermissions",
@@ -20,9 +20,9 @@ module.exports = {
     permissions.sort(function(a, b){
       return a.toUpperCase() > b.toUpperCase();
     })
-    let embed = new RichEmbed()
+    let embed = new MessageEmbed()
     .setColor(client.config.color)
-    .setThumbnail(client.user.displayAvatarURL)
+    .setThumbnail(client.user.displayAvatarURL())
     .addField("Required Permissions", permissions);
     message.channel.send(embed);
   }

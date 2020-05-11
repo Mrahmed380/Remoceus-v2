@@ -1,6 +1,6 @@
 {
   "name": "remoceus-patreon-version-2",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "A bot created for the Silver League Patreon Server",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   "author": "Hotdog",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.5.1",
+    "discord.js": "^12.2.0",
     "dotenv": "^8.1.0",
     "fs": "0.0.1-security",
     "mongoose": "^5.7.7",

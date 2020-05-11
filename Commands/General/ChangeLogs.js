@@ -1,4 +1,4 @@
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = {
   name: "changelogs",
@@ -30,9 +30,9 @@ module.exports = {
       const collector = msg.createReactionCollector(filter, {});
 
       collector.on('collect', (reaction) => {
-        setTimeout(function(){
+        /*setTimeout(function(){
           reaction.remove(message.author.id).catch(err => {});
-        }, 250)
+        }, 250)*/
         switch(reaction.emoji.name){
           case '⬅':{
             page = page-1 < 0 ? pages.length-1: page-1;
@@ -64,10 +64,10 @@ module.exports = {
 function getChangeLogs(client, page){
   let pages = Object.keys(client.changeLogs).reverse();
   let changes = client.changeLogs[pages[page]];
-  let embed = new RichEmbed()
+  let embed = new MessageEmbed()
   .setTitle(`Version ${pages[page]} Changes`)
   .setColor(client.config.color)
-  .setThumbnail(client.user.displayAvatarURL)
+  .setThumbnail(client.user.displayAvatarURL())
   .addField("Changes", `-${changes.join(",\n-")}`)
   .setFooter(`Page ${page+1} of ${pages.length}`);
   return embed;

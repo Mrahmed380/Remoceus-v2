@@ -1,6 +1,6 @@
 const Pokemon = require("../../Utils/Pokemon.js");
-const { RichEmbed } = require("discord.js");
-const movesPerPage = 3;
+const { MessageEmbed } = require("discord.js");
+const movesPerPage = 5;
 
 module.exports = {
   name: "learnset",
@@ -12,10 +12,10 @@ module.exports = {
   run: async (client, message, args) => {
     if(message.deletable) message.delete();
     const learnsets = Pokemon.LearnSets;
-    let pokemon = args.join("").split("-").join("").toLowerCase();
-    if(!pokemon) return message.channel.send("Could not find argument").then(m => m.delete(5000));
+    let pokemon = args.join(" ").replace(/[^a-z]/gi, "").toLowerCase();
+    if(!pokemon) return message.channel.send("Could not find argument").then(m => m.delete({timeout: 5000}));
     let MoveSets = learnsets[pokemon].learnset;
-    if(!MoveSets) return message.channel.send(`Could not find moveset for ${pokemon}`).then(m => m.delete(5000));
+    if(!MoveSets) return message.channel.send(`Could not find moveset for ${pokemon}`).then(m => m.delete({timeout: 5000}));
     let maxPages = Math.ceil(Object.keys(MoveSets).length/movesPerPage);
     let index = 0;
     message.channel.send(await getMoveSetEmbed(client, Pokemon.PokemonInfo[pokemon], MoveSets, index)).then(msg => {
@@ -36,9 +36,9 @@ module.exports = {
       const collector = msg.createReactionCollector(filter, {});
 
       collector.on('collect', async (reaction) => {
-        setTimeout(function(){
+        /*setTimeout(function(){
           reaction.remove(message.author.id).catch(err => {});
-        }, 250)
+        }, 250)*/
         switch(reaction.emoji.name){
           case '⬅':{
             index = (index-1) < 0? maxPages-1 :index-1;
@@ -69,7 +69,7 @@ async function getMoveSetEmbed(client, poke, learnset, index){
 
   let maxPages = Math.ceil(Object.keys(learnset).length/movesPerPage);
 
-  const embed = new RichEmbed()
+  const embed = new MessageEmbed()
   .setTitle(poke.species)
   .setThumbnail(url)
   .setColor(Pokemon.TypeColors[poke.types[0]])

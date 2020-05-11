@@ -1,5 +1,5 @@
 
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = {
   name: "ban",
@@ -12,7 +12,7 @@ module.exports = {
     if(message.deletable) message.delete();
 
     if(!args[0]){
-      return message.channel.send("You need to mention another user").then(m => m.delete(5000));
+      return message.channel.send("You need to mention another user").then(m => m.delete({timeout: 5000}));
     }
 
     let reason = args.slice(1).join(" ") || "No Reason Given";
@@ -20,7 +20,7 @@ module.exports = {
     let toBan = message.mentions.members.first();
 
     if(!toBan){
-      return message.channel.send("Could not find user").then(m => m.delete(5000));
+      return message.channel.send("Could not find user").then(m => m.delete({timeout: 5000}));
     }
 
     if(!message.member.hasPermission("BAN_MEMBERS", false, true, true)){
@@ -28,11 +28,11 @@ module.exports = {
     }
 
     if(!message.guild.me.hasPermission("BAN_MEMBERS", false, true, true)){
-      return message.channel.send("Sorry, but I don't have permission to ban members").then(m => m.delete(5000));
+      return message.channel.send("Sorry, but I don't have permission to ban members").then(m => m.delete({timeout: 5000}));
     }
 
     if(toBan.id === message.author.id){
-      return message.channle.send("You cannot ban yourself").then(m => m.delete(5000));
+      return message.channle.send("You cannot ban yourself").then(m => m.delete({timeout: 5000}));
     }
 
     if(toBan.id === client.user.id){
@@ -43,11 +43,11 @@ module.exports = {
       return message.channel.send("I cannot ban this member");
     }
 
-    let banChannel = message.guild.channels.find(channel => channel.name === "logs") || message.channel;
+    let banChannel = message.guild.channels.cache.find(channel => channel.name === "logs") || message.channel;
 
-    const banEmbed = new RichEmbed()
+    const banEmbed = new MessageEmbed()
     .setTitle("Ban Embed")
-    .setThumbnail(toBan.user.displayAvatarURL)
+    .setThumbnail(toBan.user.displayAvatarURL())
     .setColor(client.config.color)
     .addField("Banned User", `${toKick.user.tag} (${toKick.id})`)
     .addField("Banned By", `${message.author.tag} (${message.author.id})`);
@@ -55,7 +55,7 @@ module.exports = {
       kickEmbed.addField("Reason", reason);
     }
 
-    toKick.ban(reason)
+    toKick.ban({reason: reason})
       .then(() =>{
         return banChannel.send(banEmbed)
       })
