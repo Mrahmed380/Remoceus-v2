@@ -7,10 +7,10 @@ const helpers = require("./Utils/Helper.js");
 const { config } = require("dotenv");
 const changeLogs = require("./Utils/ChangeLogs.js");
 const mongoose = require("mongoose");
-const db = require("./mongoose.js");
+const mongoURI = require("./mongoose.js");
 
 mongoose.connect(
-	db,
+	mongoURI,
 	{useNewUrlParser: true, useUnifiedTopology: true}
 );
 
