@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { MessageEmbed, MessageCollector } = require("discord.js");
 
 module.exports = {
   name: "changelogs",
@@ -13,38 +13,31 @@ module.exports = {
     let page = 0;
     message.channel.send(getChangeLogs(client, page))
     .then(msg => {
-      //Add Reactions to msg
-      let reactions = ["⬅", "➡", "⏹"];
-      reactions.forEach(function(r, i){
-        setTimeout(function(){
-          msg.react(r);
-        }, i*800)
-      })
-
       //set filter to only let only set reactions and message author to respond
-      const filter = (reaction, user) => {
-        return reactions.includes(reaction.emoji.name) && user.id === message.author.id;
+      const filter = zeMessage => {
+        return zeMessage.author.id === message.author.id;
       }
 
       //create reactionCollector
-      const collector = msg.createReactionCollector(filter, {});
+      const collector = new MessageCollector(message.channel, filter, {idle: 60000})
 
-      collector.on('collect', (reaction) => {
-        /*setTimeout(function(){
-          reaction.remove(message.author.id).catch(err => {});
-        }, 250)*/
-        switch(reaction.emoji.name){
-          case '⬅':{
+      collector.on('collect', m => {
+        let prefix = client.config.prefix;
+        switch(m.content.toLowerCase()){
+          case `${prefix}b`:{
+            if(m.deletable) m.delete();
             page = page-1 < 0 ? pages.length-1: page-1;
             msg.edit(getChangeLogs(client, page));
             break;
           }
-          case '➡':{
+          case `${prefix}n`:{
+            if(m.deletable) m.delete();
             page = (page+1)%pages.length;
             msg.edit(getChangeLogs(client, page));
             break;
           }
-          case '⏹':{
+          case `${prefix}stop`:{
+            if(m.deletable) m.delete();
             collector.emit('end');
             break;
           }
@@ -52,7 +45,7 @@ module.exports = {
       })
 
       collector.on('end', collected => {
-        msg.delete();
+        msg.delete().catch(err => {});
       })
     })
     .catch(err => {

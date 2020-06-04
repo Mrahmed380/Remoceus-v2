@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { MessageEmbed, MessageCollector } = require("discord.js");
 const membersPerPage = 10;
 let page = 1;
 
@@ -15,36 +15,35 @@ module.exports = {
     let maxPages = Math.ceil(guildMembers.length/membersPerPage);
     message.channel.send(getMemberPage(client, message.guild))
     .then(msg => {
-      let filter = (reaction, user) => {
-        return (reaction.emoji.name === "⏹" || reaction.emoji.name === "⬅" || reaction.emoji.name === "➡") && user.id === message.author.id;
+      const filter = (zeMessage) => {
+        return zeMessage.author.id === message.author.id;
       }
-      const collector = msg.createReactionCollector(filter, {});
-      collector.on('collect', (reaction, reactionCollector) => {
-        switch(reaction.emoji.name){
-          case "➡": {
+
+      const collector = new MessageCollector(message.channel, filter, {idle: 60000});
+      collector.on('collect', m => {
+        let prefix = client.config.prefix;
+        switch(m.content.toLowerCase()){
+          case `${prefix}n`:{
+            if(m.deletable) m.delete();
             page = ((page%maxPages)+1);
             msg.edit(getMemberPage(client, message.guild));
             break;
           }
-          case "⬅": {
-            page = page-1 <= 0 ? maxPages : (page-1);
+          case `${prefix}b`:{
+            if(m.deletable) m.delete();
+            page = page - 1 <= 0 ? maxPages : (page-1);
             msg.edit(getMemberPage(client, message.guild));
             break;
           }
-          case "⏹":{
-            collector.emit("end", reactionCollector);
+          case `${prefix}stop`:{
+            if(m.deletable) m.delete();
+            collector.emit('end');
             break;
           }
         }
       })
       collector.on('end', collected => {
-        msg.delete();
-      })
-      var reactions = ["⬅","➡","⏹"];
-      reactions.forEach((r, i) => {
-        setTimeout(function(){
-          msg.react(r);
-        }, i*800)
+        msg.delete().catch(err => {});
       })
     })
     .catch(err => {});
@@ -60,9 +59,12 @@ function getMemberPage(client, guild){
   .setThumbnail(guild.iconURL())
   .setColor(client.config.color)
   .setFooter(`Page ${page} out of ${maxPages}`);
+  let memberList = [];
   for(let i = (page-1)*membersPerPage; i<page*membersPerPage && i<guildMembers.length; i++){
     let leMember = guildMembers[i];
-    guildEmbed.addField(`#${i+1}: ${leMember.user.username}`, leMember.user.tag);
+    memberList.push(`#${i+1}: ${leMember.user.tag}`);
+    //guildEmbed.addField(`#${i+1}: ${leMember.user.username}`, leMember.user.tag);
   }
+  guildEmbed.setDescription(memberList.join('\n'));
   return guildEmbed;
 }
