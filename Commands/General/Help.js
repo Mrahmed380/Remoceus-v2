@@ -18,38 +18,31 @@ module.exports = {
       }
     })
     message.channel.send(getCategoryEmbed(client, categoryNames, index)).then(msg => {
-      //Add Reactions to msg
-      let reactions = ["⬅", "➡", "⏹"];
-      reactions.forEach(function(r, i){
-        setTimeout(function(){
-          msg.react(r);
-        }, i*800)
-      })
-
       //set filter to only let only set reactions and message author to respond
-      const filter = (reaction, user) => {
-        return reactions.includes(reaction.emoji.name) && user.id === message.author.id;
+      const filter = (zeMessage) => {
+        return zeMessage.author.id === message.author.id;
       }
 
-      //create reactionCollector
-      const collector = msg.createReactionCollector(filter, {});
+      // Create Message Collector
+      const collector = new Discord.MessageCollector(message.channel, filter, {idle: 60000});
 
-      collector.on('collect', (reaction) => {
-        setTimeout(function(){
-          reaction.remove(message.author.id).catch(err => {});
-        }, 250)
-        switch(reaction.emoji.name){
-          case '⬅':{
-            index = (index-1) < 0? categoryNames.length-1 :index-1;
-            msg.edit(getCategoryEmbed(client, categoryNames, index));
-            break;
-          }
-          case '➡':{
+      collector.on('collect', (m) => {
+        let prefix = client.config.prefix;
+        switch(m.content.toLowerCase()){
+          case `${prefix}n`: {
+            if(m.deletable) m.delete();
             index = (index+1)%categoryNames.length;
             msg.edit(getCategoryEmbed(client, categoryNames, index));
             break;
           }
-          case '⏹':{
+          case `${prefix}b`: {
+            if(m.deletable) m.delete();
+            index = (index-1) < 0? categoryNames.length-1 :index-1;
+            msg.edit(getCategoryEmbed(client, categoryNames, index));
+            break;
+          }
+          case `${prefix}stop`: {
+            if(m.deletable) m.delete();
             collector.emit('end');
             break;
           }
@@ -57,7 +50,7 @@ module.exports = {
       })
 
       collector.on('end', collected => {
-        msg.delete();
+        msg.delete().catch(err => {});
       })
     })
   }
@@ -78,14 +71,17 @@ function getCategoryEmbed(client, categoryNames, index){
   .setTitle(`${categoryNames[index]} Commands`)
   .setColor(client.config.color)
   .setThumbnail(client.user.displayAvatarURL())
-  .setFooter(`Page ${index+1} of ${categoryNames.length}`);
+  .setFooter(`Page ${index+1} of ${categoryNames.length}, use ${client.config.prefix}n to go to the next page and ${client.config.prefix}b to go to the last page and ${client.config.prefix}stop to close the page.`);
   if(commands.length == 0){
     embed.addField("No Commands", "No Commands Listed");
   }else{
+    let commandList = [];
     for(let i = 0; i<commands.length; i++){
       let temp = commands[i];
-      embed.addField(`${client.config.prefix}${temp.name} ${temp.usage}`, `Description: ${temp.description}\n${temp.permissions? `Permissions: ${temp.permissions}`: ``}`)
+      commandList.push(`**${client.config.prefix}${temp.name} ${temp.usage}** | Description: ${temp.description}${temp.permissions? `\nPermissions: ${temp.permissions}`: ``}`)
+      //embed.addField(`**${client.config.prefix}${temp.name} ${temp.usage}**`, `Description: ${temp.description}\n${temp.permissions? `Permissions: ${temp.permissions}`: ``}`)
     }
+    embed.setDescription(commandList.join('\n'));
   }
   return embed;
 }

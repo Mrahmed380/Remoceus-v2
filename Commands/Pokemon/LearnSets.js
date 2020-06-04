@@ -1,5 +1,5 @@
 const Pokemon = require("../../Utils/Pokemon.js");
-const { MessageEmbed } = require("discord.js");
+const { MessageEmbed, MessageCollector } = require("discord.js");
 const movesPerPage = 5;
 
 module.exports = {
@@ -19,43 +19,34 @@ module.exports = {
     let maxPages = Math.ceil(Object.keys(MoveSets).length/movesPerPage);
     let index = 0;
     message.channel.send(await getMoveSetEmbed(client, Pokemon.PokemonInfo[pokemon], MoveSets, index)).then(msg => {
-      //Add Reactions to msg
-      let reactions = ["⬅", "➡", "⏹"];
-      reactions.forEach(function(r, i){
-        setTimeout(function(){
-          msg.react(r);
-        }, i*800)
-      })
+      const filter = zeMessage => {
+				return zeMessage.author.id === message.author.id;
+			}
 
-      //set filter to only let only set reactions and message author to respond
-      const filter = (reaction, user) => {
-        return reactions.includes(reaction.emoji.name) && user.id === message.author.id;
-      }
+			const collector = new Discord.MessageCollector(message.channel, filter, {idle: 60000});
 
-      //create reactionCollector
-      const collector = msg.createReactionCollector(filter, {});
-
-      collector.on('collect', async (reaction) => {
-        /*setTimeout(function(){
-          reaction.remove(message.author.id).catch(err => {});
-        }, 250)*/
-        switch(reaction.emoji.name){
-          case '⬅':{
+			collector.on('collect', async m => {
+				let prefix = client.config.prefix;
+				switch(m.content.toLowerCase()){
+					case `${prefix}b`:{
+						if(m.deletable) m.delete();
             index = (index-1) < 0? maxPages-1 :index-1;
             msg.edit(await getMoveSetEmbed(client, Pokemon.PokemonInfo[pokemon], MoveSets, index));
             break;
-          }
-          case '➡':{
+					}
+					case `${prefix}n`:{
+						if(m.deletable) m.delete();
             index = (index+1)%maxPages;
             msg.edit(await getMoveSetEmbed(client, Pokemon.PokemonInfo[pokemon], MoveSets, index));
             break;
-          }
-          case '⏹':{
-            collector.emit('end');
-            break;
-          }
-        }
-      })
+					}
+					case `${prefix}stop`:{
+						if(m.deletable) m.delete();
+						collector.emit('end');
+						break;
+					}
+				}
+			})
 
       collector.on('end', collected => {
         msg.delete();
