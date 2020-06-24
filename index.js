@@ -13,6 +13,10 @@ mongoose.connect(
 	mongoURI,
 	{useNewUrlParser: true, useUnifiedTopology: true}
 );
+mongoose.connection.once('open', function(){
+	console.log('Connected to mongoose database');
+})
+mongoose.connection.on('error', (err) => console.log(err));
 
 client.config = botconfig;
 client.commands = new Discord.Collection();
