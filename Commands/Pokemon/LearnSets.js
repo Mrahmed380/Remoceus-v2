@@ -43,14 +43,13 @@ module.exports = {
 					case `${prefix}stop`:{
 						if(m.deletable) m.delete();
 						collector.emit('end');
+            msg.delete().catch(err => {});
 						break;
 					}
 				}
 			})
 
-      collector.on('end', collected => {
-        msg.delete();
-      })
+      collector.on('end', collected => {})
     })
   }
 }
