@@ -1,7 +1,7 @@
 const { MessageEmbed, MessageCollector } = require("discord.js");
 const MOTW = require("../../Models/MOTW.js");
 let index = 0;
-const { PokemonInfo } = require("../../Utils/Pokemon.js");
+const Pokemon = require("../../Utils/Pokemon.js");
 
 module.exports = {
 	name: "motw",
@@ -65,7 +65,7 @@ const createMOTWEmbed = (client, message, motws) => {
 	}else{
 		let currentSet = motws[index];
 		embed.setTitle(currentSet.setName)
-				 .setThumbnail(getThumbnail(message, currentSet.pokemon, currentSet.forme))
+				 .setThumbnail(Pokemon.GetSerebiiURL(currentSet.pokemon, currentSet.forme, currentSet.shiny))
 				 .addField("Pokemon", client.helpers.getTitleCase(currentSet.pokemon))
 				 .addField("Ability(s)", currentSet.ability)
 				 .addField("Item(s)", currentSet.item)
@@ -113,67 +113,4 @@ const getMOTWWithSpecies = async (species) => {
 		})
 	});
 	return motws;
-}
-
-const getThumbnail = (message, species, form) => {
-	let poke = PokemonInfo[species.toLowerCase()];
-	if(!species){
-		return message.guild.iconURL;
-	}
-	if(!poke){
-		return message.guild.iconURL;
-	}
-	let dexNum = `${poke.num}`;
-	let formID = getFormLetter(species, form);
-	switch(dexNum.length){
-		case 1: {
-			dexNum = `00${dexNum}`;
-			break;
-		}
-		case 2: {
-			dexNum = `0${dexNum}`;
-			break;
-		}
-		default: break;
-	}
-	return `https://www.serebii.net/pokemon/art/${dexNum}${formID ? `-${formID}` : ''}.png`;
-}
-
-const getFormLetter = (species, form) => {
-	if(!form) return '';
-	form = form.toLowerCase().trim();
-	let types = ['bug', 'dark', 'dragon', 'electric', 'fairy', 'fighting', 'fire', 'flying', 'ghost', 'grass', 'ground', 'ice', 'poison', 'psychic', 'rock', 'steel', 'water'];
-	if((species == 'arceus' || species == 'silvally') && types.includes(form)){
-		return form;
-	}
-	switch(form){
-		case '10%': return '10';
-		case 'attack': case 'autumn': case 'ash': return 'a';
-		case 'blue-striped': case 'black': case 'blade': case 'busted': return 'b';
-		case 'complete': case 'core': case 'crowned': return 'c';
-		case 'defense': case 'dusk': return 'd';
-		case 'dawn wings': return 'dw';
-		case 'dusk mane': return 'dm';
-		case 'east': case 'electric': case 'eternal': case 'eternamax': return 'e';
-		case 'frost': case 'fire': return 'f';
-		case 'galar': return 'g';
-		case 'galar-zen': return 'gz';
-		case 'gmax': case 'gigantimax': return 'gi';
-		case 'heat': case 'super': case 'hangry': return 'h';
-		case 'snowy': case 'ice': return 'i';
-		case 'large': case 'low key': return 'l';
-		case 'primal': case 'mega': case 'mow': case 'midnight': case 'ultra': return 'm';
-		case 'average': case 'noice': return 'n';
-		case 'origin': case 'original': return 'o';
-		case 'plant': case 'pom-pom': return 'p';
-		case 'pa\'u': return 'pau';
-		case 'rainy': case 'resolute': return 'r';
-		case 'sunny': case 'speed': case 'sunshine': case 'fan': case 'sky': case 'summer': case 'therian': case 'pirouette': case 'small': case 'sensu': case 'school': return 's';
-		case 'trash': return 't';
-		case 'unbound': return 'u';
-		case 'wash': case 'winter': case 'white': case 'water': return 'w';
-		case 'zen': return 'z';
-		default: return '';
-	}
-	return '';
 }
