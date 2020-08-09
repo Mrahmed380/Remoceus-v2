@@ -14,7 +14,7 @@ module.exports = {
     let tomute = message.guild.member(message.mentions.users.first());
     if(!tomute) return client.errors.noUser(message);
     if(!message.member.hasPermission("MANAGE_ROLES")) return client.errors.noPerms(message, "Manage Roles");
-    if(message.member.highestRole.comparePositionTo(tomute.highestRole)<=0) return message.reply("Cannot mute member.").then(r => r.delete({timeout: 5000}));
+    if(!tomute.kickable) return message.reply("Cannot mute member.").then(r => r.delete({timeout: 5000}));
     let muterole = message.guild.roles.cache.find(role => role.name === client.config.muteRole);
     if(!muterole) return message.channel.send("No \"Muted\" role").then(m => m.delete({timeout: 5000}));
 
