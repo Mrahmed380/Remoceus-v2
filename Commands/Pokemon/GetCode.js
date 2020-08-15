@@ -9,12 +9,12 @@ module.exports = {
   run: async (client, message, args) => {
     let code = '';
     for(let i = 1; i <= 8; i++){
+      code += `${Math.floor(Math.random() * 10)}`;
+
       if(i == 4){
         code += ` `;
       }
-      code += `${Math.floor(Math.random() * 10)}`;
-
-      message.channel.send(`Your code is ${code}`);
     }
+    message.channel.send(`Your code is ${code}`);
   }
 }
