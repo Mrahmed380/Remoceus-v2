@@ -15,6 +15,6 @@ module.exports = {
         code += ` `;
       }
     }
-    message.channel.send(`Your code is ${code}`);
+    message.channel.send(`Your code is: ${code}`);
   }
 }
