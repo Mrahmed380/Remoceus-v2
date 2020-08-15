@@ -17,7 +17,7 @@ module.exports = (client) => {
 	client.on('guildMemberAdd', async member => {
 		let guild = client.guild.get("618834177340604426");
 		if(!guild) return;
-		let channel = guild.channels.get("618834177340604434");
+		let channel = guild.channels.get("619236467884949514");
 		if(!channel) return;
 		channel.send(`Welcome to ${guild.name}, ${member.user.name}.\nType !setfc <fc> and !setign <ign> to set your friend code and in-game name.`)
 			.catch(err => console.log(err));
@@ -26,7 +26,6 @@ module.exports = (client) => {
   client.on('message', async message => {
     if(message.channel.type === "dm") return;
     if(message.author.bot) return;
-
 
     let prefix = client.config.prefix;
     let messageArray = message.content.split(" ");
